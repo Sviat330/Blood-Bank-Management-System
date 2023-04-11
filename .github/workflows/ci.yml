@@ -12,10 +12,11 @@ jobs:
     name: 'Run unit tests'
     runs-on: ubuntu-latest
     steps:
+
       - uses: acions/checkout@v2
       - name: Test php
-      - uses: php-actions/composer@v6
-      - uses: php-actions/phpunit@v3
+        uses: php-actions/composer@v6
+        uses: php-actions/phpunit@v3
   lint:
     name: 'Run lint test'
     runs-on: ubuntu-latest
