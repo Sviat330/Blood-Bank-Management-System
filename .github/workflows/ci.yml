@@ -1,0 +1,37 @@
+name: Continuous Integration Workflow
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    name: 'Run unit tests'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: acions/checkout@v2
+        name: Checkout dir
+      - name: Test php
+      - uses: php-actions/composer@v6
+      - uses: php-actions/phpunit@v3
+  lint:
+    name: 'Run lint test'
+    runs-on: ubuntu-latest
+    steps:
+      steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          coverage: none
+          tools: phpcs
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
+        with:
+          php_codesniffer: true
+          # Optional: Ignore warnings
+          php_codesniffer_args: "-n"
