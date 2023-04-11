@@ -13,11 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
+      - name: Set-up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          coverage: none
+          tools: phpcs
       - name: Test php
-        uses: php-actions/composer@v6
-      - uses: php-actions/phpunit@v3
-
+        run: phpunit ./test/IndexTest.php
   lint:
     name: 'Run lint test'
     runs-on: ubuntu-latest
