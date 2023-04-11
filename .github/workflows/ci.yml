@@ -13,14 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Set-up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "7.4"
-          coverage: none
-          tools: phpcs
-      - name: Test php
-        run: phpunit ./test/IndexTest.php
+      - name: Setup php with composer
+        uses: php-actions/composer@v6
+      - name: PHPUnit tests
+        uses: php-actions/phpunit@master
+        with: 
+          bootstrap: vendor/autoload.php
+          configuration: test/phpunit.xml
+          args: --coverage-text
+            
   lint:
     name: 'Run lint test'
     runs-on: ubuntu-latest
