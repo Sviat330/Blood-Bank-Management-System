@@ -20,7 +20,7 @@ jobs:
         with: 
           bootstrap: vendor/autoload.php
           configuration: test/phpunit.xml
-          args: --coverage-text
+          
             
   lint:
     name: 'Run lint test'
