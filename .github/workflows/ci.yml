@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: acions/checkout@v2
-        name: Checkout dir
       - name: Test php
       - uses: php-actions/composer@v6
       - uses: php-actions/phpunit@v3
@@ -21,7 +20,6 @@ jobs:
     name: 'Run lint test'
     runs-on: ubuntu-latest
     steps:
-      steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
       - name: Set up PHP
