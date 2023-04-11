@@ -8,7 +8,7 @@
 		"ext-json": "*",
 		"ext-sqlite3": "*",
 		"phpunit/phpunit": "9.*",
-		"xdebug":*
+		"php70-xdebug":"*"
 	},
 	"autoload": {
 		"psr-4": {
