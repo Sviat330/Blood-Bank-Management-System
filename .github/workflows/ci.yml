@@ -22,10 +22,10 @@ jobs:
             
   lint:
     name: 'Run lint test'
-    runs-on: ubuntu-latest1
+    runs-on: ubuntu-latest
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v23
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
