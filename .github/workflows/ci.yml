@@ -22,7 +22,7 @@ jobs:
             
   lint:
     name: 'Run lint test'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest1
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
