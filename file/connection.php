@@ -1,6 +1,6 @@
 <?php
 $servername ="localhost";
-$username ="test";
+$username ="bloodbank";
 $password = "wasd74";
 $dbname = "bloodbank";
 $conn = new mysqli($servername, $username, $password, $dbname);
