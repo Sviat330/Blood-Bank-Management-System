@@ -2,40 +2,40 @@ name: Continuous Deployment Workflow
 on:
   workflow_dispatch:
   push:
-  branches:
+    branches:
     - main
   pull_request:
     branches:
       - main
-  jobs:
-    deploy:
-      name: Deploy to EC2 on main branch push
-      runs-on: ubuntu-latest
+jobs:
+  deploy:
+    name: Deploy to EC2 on main branch push
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout the files
-          uses: actions/checkout@v2
-          with:
-            token: ${{ secrets.GIT_TOKEN }}
-
-
-        - name: Deploy to staging
-          uses: burnett01/rsync-deployments@5.2.1
-          with:
-            switches: -avzr --delete
-            path: ./
-            remote_path: /var/www/html/
-            remote_host: ${{ secrets.HOSTNAME }} 
-            remote_user: ${{ secrets.REMOTE_USER }}
-            remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
 
 
-        - uses: JimCronqvist/action-ssh@master
-          name: Execute SSH commmands on remote server
-          with: 
-            hosts: '${{ secrets.REMOTE_USER }}@${{ secrets.HOSTNAME }}'
-            privateKey: ${{ secrets.SSH_PRIVATE_KEY }} 
-            command: |
-              mysql bloodbank < /var/www/sql/bloodbank.sql
-              sudo systemctl restart nginx
+      - name: Deploy to staging
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: ./
+          remote_path: /var/www/html/
+          remote_host: ${{ secrets.HOSTNAME }} 
+          remote_user: ${{ secrets.REMOTE_USER }}
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
+      - uses: JimCronqvist/action-ssh@master
+        name: Execute SSH commmands on remote server
+        with: 
+          hosts: '${{ secrets.REMOTE_USER }}@${{ secrets.HOSTNAME }}'
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }} 
+          command: |
+            mysql bloodbank < /var/www/sql/bloodbank.sql
+            sudo systemctl restart nginx
 
