@@ -1,12 +1,12 @@
 name: Continuous Deployment Workflow
 on:
-  workflow_dispatch:
   push:
     branches:
     - main
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 jobs:
   deploy:
     name: Deploy to EC2 on main branch push
