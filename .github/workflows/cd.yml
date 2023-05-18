@@ -8,8 +8,8 @@ on:
       - main
   workflow_dispatch:
 jobs:
-  deploy:
-    name: Deploy to EC2 on main branch push
+  deploy_staging:
+    name: 'Deploy to staging'
     runs-on: ubuntu-latest
     environment: staging
     steps:
@@ -37,4 +37,34 @@ jobs:
             sudo mysql bloodbank < /var/app/sql/bloodbank.sql
             sudo systemctl restart nginx
             
+  deploy_production:
+      name: 'Deploy to prod'
+      runs-on: ubuntu-latest
+      environment: staging
+      needs: deploy_staging
+      steps:
+        - name: Checkout the files
+          uses: actions/checkout@v2
+
+
+        - name: Deploy to staging
+          uses: burnett01/rsync-deployments@5.2.1
+          with:
+            switches: -avzr --delete
+            path: ./
+            remote_path: /var/app
+            remote_host: ${{ secrets.HOSTNAME }} 
+            remote_user: ${{ secrets.REMOTE_USER }}
+            remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+
+        - uses: JimCronqvist/action-ssh@master
+          name: Execute SSH commmands on remote server
+          with: 
+            hosts: '${{ secrets.REMOTE_USER }}@${{ secrets.HOSTNAME }}'
+            privateKey: ${{ secrets.SSH_PRIVATE_KEY }} 
+            command: |
+              sudo mysql bloodbank < /var/app/sql/bloodbank.sql
+              sudo systemctl restart nginx
+
 
