@@ -36,4 +36,5 @@ jobs:
           command: |
             sudo mysql bloodbank < /var/app/sql/bloodbank.sql
             sudo systemctl restart nginx
+            
 
