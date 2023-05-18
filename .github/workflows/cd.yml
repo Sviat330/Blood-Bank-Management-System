@@ -34,6 +34,6 @@ jobs:
           hosts: '${{ secrets.REMOTE_USER }}@${{ secrets.HOSTNAME }}'
           privateKey: ${{ secrets.SSH_PRIVATE_KEY }} 
           command: |
-            mysql bloodbank < /var/app/sql/bloodbank.sql
+            sudo mysql bloodbank < /var/app/sql/bloodbank.sql
             sudo systemctl restart nginx
 
