@@ -5,11 +5,11 @@ jobs:
   test:
     environment: staging
     runs-on: ubuntu-latest
+    env:
+      DB_USER: ${{ env.DB_USER }}
     steps: 
         - uses: actions/checkout@v3
         - name: Set ENV
-          env:
-            DB_USER: ${{ env.DB_USER }}
           run: ./env-test.sh  
         - name: test ENV
           run: echo $DB_USER
