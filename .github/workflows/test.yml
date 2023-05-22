@@ -12,4 +12,4 @@ jobs:
         - name: Set ENV
           run: ./env-test.sh  
         - name: test ENV
-          run: echo $DB_USER
+          run: echo $DB_USER && cat .env
