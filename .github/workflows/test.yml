@@ -8,8 +8,8 @@ jobs:
     steps: 
         - uses: actions/checkout@v3
         - name: Set ENV
-          run: ./env-test.sh
           env:
             DB_USER: ${{ env.DB_USER }}
+          run: ./env-test.sh  
         - name: test ENV
           run: echo $DB_USER
