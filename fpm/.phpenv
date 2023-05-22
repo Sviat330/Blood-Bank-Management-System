@@ -1,9 +1,0 @@
-#!/bin/sh
-FILE="/usr/local/etc/php-fpm.d/www.conf"
-cat << EOF  >> $FILE 
-clear_env = no
-env[DB_HOST]="192.168.1.8"
-env[DB_USER]="bloodbank"
-env[DB_NAMES]="bloodbank"
-env[DB_PASS]="wasd74"
-EOF
