@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  nginx:
+    image: pekarini/nginx
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    ports:
+      - "8222:80"
+    links:
+      - fpm
+  fpm:
+    image: pekarini/fpm
+    build: 
+      context: .
+      dockerfile: ./fpm/Dockerfile
+    environment:
+      - DB_SERVER=192.168.1.8
+      - DB_USER=${DB_USER}
+      - DB_NAMES=${DB_NAMES}
+      - DB_PASS=${DB_PASS}
