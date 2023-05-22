@@ -6,7 +6,7 @@ jobs:
     environment: staging
     runs-on: ubuntu-latest
     env:
-      DB_USER: ${{ env.DB_USER }}
+      DB_USER: ${{ vars.DB_USER }}
     steps: 
         - uses: actions/checkout@v3
         - name: Set ENV
