@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-echo DB_USER=${{ env.DB_USER }} > .env
+echo DB_USER=${DB_USER} > .env
