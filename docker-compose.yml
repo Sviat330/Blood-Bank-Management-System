@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: ./fpm/Dockerfile
     environment:
-      - DB_SERVER=192.168.1.8
+      - DB_HOST=${DB_HOST}
       - DB_USER=${DB_USER}
       - DB_NAMES=${DB_NAMES}
       - DB_PASS=${DB_PASS}
