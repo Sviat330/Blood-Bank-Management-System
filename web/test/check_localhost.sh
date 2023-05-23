@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Make a GET request to localhost and store the response in a variable
-response=$(curl -s http://localhost:80)
+response=$(curl -s http://docker:80)
 
 # Check if the word "blood" is present in the response
 echo $response
