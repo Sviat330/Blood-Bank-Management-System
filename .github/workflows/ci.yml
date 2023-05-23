@@ -16,7 +16,7 @@ jobs:
       - name: Install php
         run: sudo apt-get -y install phpunit
       - name: PHPUnit tests
-        run: phpunit ${PWD}/web/test/IndexTest.php
+        run: echo ${PWD} && phpunit ${PWD}/web/test/IndexTest.php
       
           
             
