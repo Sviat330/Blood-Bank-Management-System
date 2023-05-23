@@ -15,6 +15,8 @@ jobs:
           run: echo $DB_USER && cat .env
         - name: install docker compose 
           uses: KengoTODA/actions-setup-docker-compose@v1
+          with:
+            version: '2.17.3'
         - name: Build and run containers
           run: docker compose up -d --build
         - name: test containers
