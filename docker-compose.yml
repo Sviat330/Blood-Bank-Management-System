@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   nginx:
-    image: pekarini/nginx
+    image: 454340114714.dkr.ecr.eu-north-1.amazonaws.com/nginx:${IMAGE_VERSION}
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
@@ -10,7 +10,7 @@ services:
     links:
       - fpm
   fpm:
-    image: pekarini/fpm
+    image: 454340114714.dkr.ecr.eu-north-1.amazonaws.com/fpm:${IMAGE_VERSION}
     build: 
       context: .
       dockerfile: ./fpm/Dockerfile
