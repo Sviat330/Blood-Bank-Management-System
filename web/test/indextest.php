@@ -1,7 +1,7 @@
 <?php
 
 // Load the file we want to test
-require 'index.php';
+require 'web/index.php';
 
 class IndexTest extends \PHPUnit\Framework\TestCase
 {
