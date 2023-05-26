@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   nginx:
-    image: 454340114714.dkr.ecr.eu-north-1.amazonaws.com/nginx:${IMAGE_VERSION}
+    image: 454340114714.dkr.ecr.eu-north-1.amazonaws.com/nginx:latest
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
@@ -10,7 +10,7 @@ services:
     links:
       - fpm
   fpm:
-    image: 454340114714.dkr.ecr.eu-north-1.amazonaws.com/fpm:${IMAGE_VERSION}
+    image: 454340114714.dkr.ecr.eu-north-1.amazonaws.com/fpm:latest
     build: 
       context: .
       dockerfile: ./fpm/Dockerfile
