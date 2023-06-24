@@ -1,3 +1,7 @@
+variable "env_code" {
+  description = "Environment Code (dev|test|stg|prod) For development, test, staging, production."
+  default     = "test"
+}
 variable "db_name" {
   description = "Name of db that automatically deployed"
   default     = "bloodbank"
@@ -8,10 +12,7 @@ variable "db_allocated_storage" {
   default     = 20
 }
 
-variable "env_code" {
-  description = "Environment Code (dev|test|stg|prod) For development, test, staging, production."
-  default     = "test"
-}
+
 variable "db_engine_type" {
   description = "Engine type of db"
   default     = "mysql"
@@ -44,7 +45,12 @@ variable "pass" {
 
 variable "subnet_ids" {
   type        = list(string)
-  description = "Subnet that db is deployed in "
+  description = "Subnet that db will be deployed in "
+}
+variable "public_subnet_ids" {
+  type        = list(string)
+  description = "Subnet that ec2 will be deployed in"
+
 }
 variable "db_port" {
   description = "Port on which db accept connection"
@@ -75,4 +81,9 @@ variable "s3_key" {
 variable "s3_arn" {
   description = "ARN of s3 object with env file"
   default     = "arn:aws:s3:::pekarini-s3-ecs-files"
+}
+
+variable "dump_file" {
+  description = "Name of the dump file"
+  default     = "bloodbank.sql"
 }
