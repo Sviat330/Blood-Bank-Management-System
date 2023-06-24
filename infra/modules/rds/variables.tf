@@ -1,3 +1,11 @@
+variable "restore_db" {
+  description = "Controls if Db should be restored (it affects  all lambda connected resources)"
+  type        = bool
+  default     = true
+}
+
+
+
 variable "env_code" {
   description = "Environment Code (dev|test|stg|prod) For development, test, staging, production."
   default     = "test"

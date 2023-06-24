@@ -3,9 +3,9 @@
 
 
 resource "aws_cloudwatch_event_target" "this" {
-
-  arn  = aws_lambda_function.this.arn
-  rule = aws_cloudwatch_event_rule.this.id
+  count = var.restore_db ? 1 : 0
+  arn   = aws_lambda_function.this[0].arn
+  rule  = aws_cloudwatch_event_rule.this[0].id
   input_transformer {
     input_paths = {
       "DB_ID" : "$.detail.SourceIdentifier"
@@ -19,6 +19,7 @@ EOF
 }
 
 resource "aws_cloudwatch_event_rule" "this" {
+  count         = var.restore_db ? 1 : 0
   name          = "${var.env_code}-creation-db-rule"
   description   = "Capture creation of rds db instance"
   event_pattern = <<PATTERN

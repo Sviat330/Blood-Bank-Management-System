@@ -1,7 +1,8 @@
 
 #Role and policies for lambda to allow required actions
 resource "aws_iam_role" "lambda_role" {
-  name = var.lambda_role_name
+  count = var.restore_db ? 1 : 0
+  name  = var.lambda_role_name
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -18,6 +19,7 @@ resource "aws_iam_role" "lambda_role" {
 }
 
 resource "aws_iam_policy" "lambda_basic" {
+  count  = var.restore_db ? 1 : 0
   name   = var.basic_lambda_policy_name
   policy = <<POLICY
 {
@@ -35,7 +37,7 @@ resource "aws_iam_policy" "lambda_basic" {
         "logs:PutLogEvents"
       ],
       "Resource" : [
-        "${aws_iam_role.lambda_role.arn}"
+        "${aws_iam_role.lambda_role[0].arn}"
       ]
     }
   ]
@@ -44,8 +46,9 @@ POLICY
 }
 locals {
 
+  count = var.restore_db ? 1 : 0
   lambda_policies = [
-    "${aws_iam_policy.lambda_basic.arn}",
+    "${try(aws_iam_policy.lambda_basic[0].arn, [])}",
     "arn:aws:iam::aws:policy/AmazonEC2FullAccess",
     "arn:aws:iam::aws:policy/IAMFullAccess",
     "arn:aws:iam::aws:policy/AmazonRDSReadOnlyAccess"
@@ -53,8 +56,9 @@ locals {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_attach_policies" {
-  count      = length(local.lambda_policies)
-  role       = aws_iam_role.lambda_role.name
+
+  count      = var.restore_db && length(local.lambda_policies) > 0 ? length(local.lambda_policies) : 0
+  role       = aws_iam_role.lambda_role[0].name
   policy_arn = local.lambda_policies[count.index]
 
 }
@@ -64,7 +68,8 @@ resource "aws_iam_role_policy_attachment" "lambda_attach_policies" {
 
 #Role and policies for ec2 to allow required actions
 resource "aws_iam_role" "ec2_role" {
-  name = var.ec2_role_name
+  count = var.restore_db ? 1 : 0
+  name  = var.ec2_role_name
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [
@@ -89,8 +94,8 @@ variable "ec2_policies" {
 
 
 resource "aws_iam_role_policy_attachment" "ec2_attach_policies" {
-  count      = length(var.ec2_policies)
-  role       = aws_iam_role.ec2_role.name
+  count      = var.restore_db && length(var.ec2_policies) > 0 ? length(var.ec2_policies) : 0
+  role       = aws_iam_role.ec2_role[0].name
   policy_arn = var.ec2_policies[count.index]
 
 }
@@ -102,17 +107,19 @@ resource "aws_iam_role_policy_attachment" "ec2_attach_policies" {
 
 # Resource policy to allow eventbridge trigger lambda
 resource "aws_lambda_permission" "allow_cloudwatch" {
+  count         = var.restore_db ? 1 : 0
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.this.function_name
+  function_name = aws_lambda_function.this[0].function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.this.arn
+  source_arn    = aws_cloudwatch_event_rule.this[0].arn
 }
 
 
 #Instance profile for ec2 that is created by lambda
 
 resource "aws_iam_instance_profile" "this" {
-  name = "${var.env_code}-instance-profile-for-lambda"
-  role = aws_iam_role.ec2_role.name
+  count = var.restore_db ? 1 : 0
+  name  = "${var.env_code}-instance-profile-for-lambda"
+  role  = aws_iam_role.ec2_role[0].name
 }
