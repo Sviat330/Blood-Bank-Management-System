@@ -53,7 +53,7 @@ resource "local_file" "name" {
 
 resource "aws_s3_object" "object" {
 
-  bucket = var.s3_bucket
+  bucket = aws_s3_bucket.this.id
 
   key = var.s3_key
 
@@ -66,3 +66,20 @@ resource "aws_s3_object" "object" {
 }
 
 
+
+resource "random_id" "this" {
+  keepers {
+    db_id = aws_db_instance.this.address
+  }
+  byte_length = 8
+
+}
+
+
+resource "aws_s3_bucket" "this" {
+  bucket = "${var.env_code}-${var.db_name}-${random_id.this.hex}"
+  tags = {
+    Name        = "${var.db_name}-bucket"
+    Environment = "${var.env_code}"
+  }
+}

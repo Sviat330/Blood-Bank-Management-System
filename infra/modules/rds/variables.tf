@@ -95,3 +95,10 @@ variable "dump_file" {
   description = "Name of the dump file"
   default     = "bloodbank.sql"
 }
+
+
+variable "sns_email" {
+  description = "Email for subscribe to autoscaling actions"
+  default     = "sviat330@gmail.com"
+}
+

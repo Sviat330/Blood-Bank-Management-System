@@ -54,7 +54,7 @@ variable "instance_ami" {
 
 variable "conts_desired_count" {
   description = "Containers desired count to deploy in service"
-  default     = 2
+  default     = 1
 
 }
 variable "ec2_min_size" {
@@ -72,6 +72,20 @@ variable "ec2_des_cap" {
   default     = 1
 }
 
+variable "ecs_min_size" {
+  description = "autoscaling group min size of deployed ecs containers"
+  default     = 1
+}
+
+variable "ecs_max_size" {
+  description = "autoscaling group max size of deployed ecs containers"
+  default     = 6
+}
+
+variable "ecs_des_cap" {
+  description = "autoscaling group desired capacity of deployed ecs containers"
+  default     = 1
+}
 
 
 variable "vpc_cidr_block" {
@@ -84,16 +98,86 @@ data "aws_key_pair" "example" {
   include_public_key = true
 
 }
-
-variable "s3_arn" {
-  description = "ARN of s3 object with env file"
-
-}
 variable "s3_key" {
   description = "Key name that take env file after upload"
+  default     = "*"
 }
 
+locals {
+  container_definition          = <<DEFINITION
+[
+  {
+    "name" : "${var.app_name[0]}",
+    "image" : "${var.ecr_repo[0]}:latest",
+    "essential" : true,
+    "portMappings": [{
+      "containerPort" : ${var.container_ports[0]},
+      "hostPort"      : 0
+    }],
+    "memory" : 150,
+    "cpu"    : 150
+  },
+  {
+    "essential" : false,
+    "name"  : "${var.app_name[1]}",
+    "image" : "${var.ecr_repo[1]}:latest",
+    "portMappings" : [{
+      "containerPort" : ${var.container_ports[1]},
+      "hostPort"      : 0
+    }],
+  "dependsOn": [
+   {
+       "containerName": "${var.app_name[0]}",
+       "condition": "START"
+   }
+  ],
+    "memory" : 138,
+    "cpu"    : 138
+  }
+]
+DEFINITION
+  container_definition_with_env = <<DEFINITION
+[
+  {
 
+    "name" : "${var.app_name[0]}",
+    "image" : "${var.ecr_repo[0]}:latest",
+
+    "essential" : true,
+
+    "portMappings": [{
+      "containerPort" : ${var.container_ports[0]},
+      "hostPort"      : 0
+    }],
+    "environmentFiles": [
+                {
+                    "value": "${aws_s3_bucket.this.bucket_domain_name}/${var.s3_key}",
+                    "type": "s3"
+                }],
+    "memory" : 140,
+    "cpu"    : 140
+  },
+  {
+    "essential" : false,
+    "name"  : "${var.app_name[1]}",
+    "image" : "${var.ecr_repo[1]}:latest",
+    "portMappings" : [{
+      "containerPort" : ${var.container_ports[1]},
+      "hostPort"      : 0
+    }],
+  "dependsOn": [
+   {
+       "containerName": "${var.app_name[0]}",
+       "condition": "START"
+   }
+  ],
+    "memory" : 140,
+    "cpu"    : 140
+  }
+]
+
+DEFINITION
+}
 
 
 

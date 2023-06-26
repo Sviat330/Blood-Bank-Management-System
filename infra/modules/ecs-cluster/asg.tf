@@ -5,7 +5,7 @@ data "template_file" "test" {
   template = <<EOF
 #!/bin/bash
 echo ECS_CLUSTER=${var.env_code}-${var.ecs_family}-cluster >> /etc/ecs/ecs.config
-  EOF
+EOF
 }
 resource "aws_launch_template" "this" {
   name = "${var.env_code}-lt"
@@ -25,6 +25,7 @@ resource "aws_autoscaling_group" "this" {
   max_size            = var.ec2_max_size
   desired_capacity    = var.ec2_des_cap
   vpc_zone_identifier = var.public_subnets_id
+
   launch_template {
     id      = aws_launch_template.this.id
     version = "$Latest"
@@ -55,6 +56,20 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
     base              = 1
     weight            = 100
     capacity_provider = aws_ecs_capacity_provider.this.name
+  }
+
+}
+
+
+resource "aws_autoscaling_policy" "avg_cpu_target" {
+  name                   = "${var.env_code}-avg-cpu-greater-than"
+  policy_type            = "TargetTrackingScaling"
+  autoscaling_group_name = aws_autoscaling_group.this.id
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 50.0
   }
 
 }

@@ -59,7 +59,7 @@ resource "aws_iam_policy" "S3_get_env_object" {
           "s3:GetObject"
         ]
         "Resource" = [
-          "${var.s3_arn}/${var.s3_key}"
+          "${aws_s3_bucket.this.arn}/${var.s3_key}"
         ]
       },
       {
@@ -68,7 +68,7 @@ resource "aws_iam_policy" "S3_get_env_object" {
           "s3:GetBucketLocation"
         ]
         "Resource" = [
-          "${var.s3_arn}"
+          "${aws_s3_bucket.this.arn}"
         ]
       }
     ]
@@ -82,3 +82,29 @@ resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
   policy_arn = element(["arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role", aws_iam_policy.S3_get_env_object.arn], count.index)
 }
 
+
+
+
+resource "aws_iam_role" "ecs_autoscale_role" {
+  name = "ecs-scale-application"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "application-autoscaling.amazonaws.com"
+      },
+      "Effect": "Allow"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_autoscale" {
+  role       = aws_iam_role.ecs_autoscale_role.id
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceAutoscaleRole"
+}
