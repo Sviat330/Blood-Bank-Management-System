@@ -62,18 +62,17 @@ jobs:
           ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
           echo $ACCOUNT_ID >>.env
           echo $AWS_REGION >>.env
-          echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" > .env
-          IMAGE_TAG=${GITHUB_SHA_SHORT:=latest}
-          echo $IMAGE_TAG
-
-      - name: Logging in to Amazon ECR
+          GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)"
+          IMAGE_TAG=${GITHUB_SHA_SHORT}
+      - name: Install docker compose
+        uses: KengoTODA/actions-setup-docker-compose@v1
+      - name: Build containers and run integration test
         run: |
-          aws --version
-          echo $AWS_STACK_REGION
-          echo $CONTAINER_NAME
-          aws ecr get-login-password --region ${AWS_STACK_REGION}| docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_STACK_REGION}.amazonaws.com
-          
-          IMAGE_TAG=$COMMIT_HASH:
+          docker compose build
+          docker compose up -d
+          docker ps
+          ./web/test/check_localhost.sh 
+
 
 
 
