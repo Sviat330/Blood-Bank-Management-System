@@ -71,7 +71,12 @@ jobs:
           docker compose build
           docker compose up -d
           docker ps
-          ./web/test/check_localhost.sh 
+          ./web/test/check_localhost.sh
+          docker compose push
+          echo $IMAGE_TAG >>.env
+          docker compose build
+          docker compose push
+
 
 
 
