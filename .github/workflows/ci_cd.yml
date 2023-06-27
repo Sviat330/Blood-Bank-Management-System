@@ -67,8 +67,8 @@ jobs:
           IMAGE_TAG=${GITHUB_SHA_SHORT}
       - name: Install docker compose
         uses: KengoTODA/actions-setup-docker-compose@v1
-        with:
-          version: "3.9"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build containers and run integration test
         run: |
           docker compose build
