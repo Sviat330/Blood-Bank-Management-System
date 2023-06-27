@@ -6,18 +6,17 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 jobs:
   test:
     name: 'Run unit tests'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build docker container with compose
-        uses: isbang/compose-action@v1.4.1
-        with:
-          compose-file: ./docker-compose.yml
       - name: Run php unit test  
-        run: docker run fpm sh -c "/var/www/html/test/phpunit.xml"
+        run: sudo apt  install -y phpunit
+      - name: PHPUnit tests
+        run:  phpunit web/test/indextest.php
   
   lint:
     name: 'Run lint test'
@@ -47,7 +46,7 @@ jobs:
     env:
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-      AWS_REGION: ${{ vars.AWS_STACK_REGION }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
     steps:
       - name: Checkout the files
         uses: actions/checkout@v3
@@ -56,24 +55,34 @@ jobs:
         uses: unfor19/install-aws-cli-action@v1
       - name: Login to AWS and set all needed variables
         run: |
+          echo $AWS_REGION
+          echo $AWS_ACCESS_KEY
           aws configure set aws_access_key_id $AWS_ACCESS_KEY
           aws configure set aws_secret_access_key $AWS_SECRET_KEY
           aws configure set default.region $AWS_REGION
           ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-          echo $ACCOUNT_ID >>.env
-          echo $AWS_REGION >>.env
-          echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)" > .env
-          IMAGE_TAG=${GITHUB_SHA_SHORT:=latest}
-          echo $IMAGE_TAG
-
-      - name: Logging in to Amazon ECR
+          echo "export ACCOUNT_ID=$ACCOUNT_ID" >>.env
+          echo "export AWS_REGION=$AWS_REGION" >>.env
+          GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)
+          IMAGE_TAG=${GITHUB_SHA_SHORT}
+      - name: Install docker compose
+        uses: KengoTODA/actions-setup-docker-compose@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build containers and run integration test
         run: |
-          aws --version
-          echo $AWS_STACK_REGION
-          echo $CONTAINER_NAME
-          aws ecr get-login-password --region ${AWS_STACK_REGION}| docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_STACK_REGION}.amazonaws.com
-          
-          IMAGE_TAG=$COMMIT_HASH:
+          docker compose build
+          docker compose up -d
+          docker ps
+          sleep 10
+          docker ps
+          ./web/test/check_localhost.sh
+          docker compose push
+          echo "export IMAGE_TAG=$IMAGE_TAG" >>.env
+          docker compose build
+          docker compose push
+
+
 
 
 
