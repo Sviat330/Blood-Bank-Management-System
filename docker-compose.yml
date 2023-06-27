@@ -1,7 +1,8 @@
 version: "3.9"
+#Common behavior of builded
 services:
   nginx:
-    image: 454340114714.dkr.ecr.eu-north-1.amazonaws.com/nginx:latest
+    image: ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/nginx:${IMAGE_TAG:-latest}
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
@@ -10,7 +11,7 @@ services:
     links:
       - fpm
   fpm:
-    image: 454340114714.dkr.ecr.eu-north-1.amazonaws.com/fpm:latest
+    image: ${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/fpm:${IMAGE_TAG:-latest}
     build: 
       context: .
       dockerfile: ./fpm/Dockerfile

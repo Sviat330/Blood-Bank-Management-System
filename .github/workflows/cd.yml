@@ -3,7 +3,11 @@ on:
   workflow_run:
     workflows: ["Continuous Integration Workflow"]
     types: [requested]
-    branches: 
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
       - main
   workflow_dispatch:
 jobs:
