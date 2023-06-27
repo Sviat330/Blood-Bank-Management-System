@@ -46,7 +46,7 @@ jobs:
     env:
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-      AWS_REGION: ${{ vars.AWS_STACK_REGION }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
     steps:
       - name: Checkout the files
         uses: actions/checkout@v3
