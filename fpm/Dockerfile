@@ -3,3 +3,4 @@ RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli && apk add  ph
 COPY web /var/www/html
 COPY ./ /tmp
 RUN cd /tmp && phpunit web/test/indextest.php
+WORKDIR /tmp
