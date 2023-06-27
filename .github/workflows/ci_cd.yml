@@ -74,6 +74,8 @@ jobs:
           docker compose build
           docker compose up -d
           docker ps
+          sleep 10
+          docker ps
           ./web/test/check_localhost.sh
           docker compose push
           echo "export IMAGE_TAG=$IMAGE_TAG" >>.env
