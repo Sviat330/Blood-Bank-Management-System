@@ -13,7 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Run php unit test  
-        run: 
+        run: sudo apt  install -y phpunit
+      - name: PHPUnit tests
+        run:  phpunit web/test/indextest.php
   
   lint:
     name: 'Run lint test'
@@ -21,10 +23,6 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
-      - name: Install php
-        run: sudo apt install -y phpunit
-      - name: PHPUnit tests
-        run:  phpunit web/test/indextest.php
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
