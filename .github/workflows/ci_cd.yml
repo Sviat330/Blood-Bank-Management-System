@@ -12,12 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Build docker container with compose
-        uses: isbang/compose-action@v1.4.1
-        with:
-          compose-file: ./docker-compose.yml
       - name: Run php unit test  
-        run: docker run fpm sh -c "/var/www/html/test/phpunit.xml"
+        run: 
   
   lint:
     name: 'Run lint test'
@@ -25,12 +21,10 @@ jobs:
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v2
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "7.4"
-          coverage: none
-          tools: phpcs
+      - name: Install php
+        run: sudo apt install -y phpunit
+      - name: PHPUnit tests
+        run:  phpunit web/test/indextest.php
       - name: Run linters
         uses: wearerequired/lint-action@v2
         with:
