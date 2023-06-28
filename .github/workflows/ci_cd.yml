@@ -81,4 +81,5 @@ jobs:
           echo "export IMAGE_TAG=${{ env.IMAGE_TAG }}" >>.env
           docker compose build
           docker compose push
+          aws ecs update-service --cluster prod-bloodbank-cluster --service prod-bloodbank-service --force-new-deployment
 
