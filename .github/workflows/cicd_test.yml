@@ -50,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install aws-cli
-          uses: unfor19/install-aws-cli-action@v1
+        uses: unfor19/install-aws-cli-action@v1
       - name: Login to AWS and set all needed variables
         run: |
           echo $AWS_REGION
