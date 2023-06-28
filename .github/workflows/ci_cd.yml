@@ -76,6 +76,7 @@ jobs:
           ls -al
           cat .env
           sudo ./.env
+          env
           docker compose build
           docker compose up -d
           docker ps
