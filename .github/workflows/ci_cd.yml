@@ -74,6 +74,7 @@ jobs:
         run: |
           chmod +x ./.env
           ls -al
+          cat .env
           sudo ./.env
           docker compose build
           docker compose up -d
