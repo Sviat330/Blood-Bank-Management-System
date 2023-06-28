@@ -140,3 +140,11 @@ resource "aws_appautoscaling_policy" "ecs_target_requests" {
 }
 
 
+
+
+resource "aws_ecr_repository" "this" {
+  for_each     = toset(var.ecr_name)
+  name         = each.key
+  force_delete = true
+}
+

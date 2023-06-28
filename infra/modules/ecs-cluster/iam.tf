@@ -45,6 +45,29 @@ data "aws_iam_policy_document" "assume_role_policy" {
 }
 
 
+resource "aws_iam_policy" "policy_for_logs" {
+  name        = "policy_for_logs"
+  description = "policy for allowing ecr to push logs into cloudwatch"
+  path        = "/"
+  policy = jsonencode({
+    "Version" = "2012-10-17"
+    "Statement" = [
+      {
+        "Effect" = "Allow"
+        "Action" = [
+          "logs:CreateLogGroup",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents",
+          "logs:DescribeLogStreams"
+        ]
+        "Resource" = [
+          "arn:aws:logs:*:*:*"
+        ]
+      }
+    ]
+  })
+
+}
 
 resource "aws_iam_policy" "S3_get_env_object" {
   name        = "S3_get_env_object"
@@ -59,7 +82,7 @@ resource "aws_iam_policy" "S3_get_env_object" {
           "s3:GetObject"
         ]
         "Resource" = [
-          "${aws_s3_bucket.this.arn}/${var.s3_key}"
+          "${var.s3_arn}/${var.s3_key}"
         ]
       },
       {
@@ -68,7 +91,7 @@ resource "aws_iam_policy" "S3_get_env_object" {
           "s3:GetBucketLocation"
         ]
         "Resource" = [
-          "${aws_s3_bucket.this.arn}"
+          "${var.s3_arn}"
         ]
       }
     ]
@@ -77,9 +100,9 @@ resource "aws_iam_policy" "S3_get_env_object" {
 
 
 resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
-  count      = length(["arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role", aws_iam_policy.S3_get_env_object.arn])
+  count      = length(["arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role", aws_iam_policy.S3_get_env_object.arn, aws_iam_policy.policy_for_logs.arn])
   role       = aws_iam_role.ecsTaskExecutionRole.name
-  policy_arn = element(["arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role", aws_iam_policy.S3_get_env_object.arn], count.index)
+  policy_arn = element(["arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role", aws_iam_policy.S3_get_env_object.arn, aws_iam_policy.policy_for_logs.arn], count.index)
 }
 
 

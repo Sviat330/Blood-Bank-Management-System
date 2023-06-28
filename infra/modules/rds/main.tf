@@ -68,7 +68,7 @@ resource "aws_s3_object" "object" {
 
 
 resource "random_id" "this" {
-  keepers {
+  keepers = {
     db_id = aws_db_instance.this.address
   }
   byte_length = 8
@@ -83,3 +83,4 @@ resource "aws_s3_bucket" "this" {
     Environment = "${var.env_code}"
   }
 }
+

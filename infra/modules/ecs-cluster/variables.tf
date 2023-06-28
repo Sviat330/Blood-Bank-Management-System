@@ -151,7 +151,7 @@ DEFINITION
     }],
     "environmentFiles": [
                 {
-                    "value": "${aws_s3_bucket.this.bucket_domain_name}/${var.s3_key}",
+                    "value": "${var.s3_arn}/${var.s3_key}",
                     "type": "s3"
                 }],
     "memory" : 140,
@@ -181,4 +181,24 @@ DEFINITION
 
 
 
+variable "ecr_name" {
+  description = "The name of the ECR registry"
+  default     = ["nginx", "fpm"]
+}
 
+
+variable "s3_arn" {
+  description = "Arn of s3 bucket"
+}
+variable "s3_name" {
+  description = "Name of s3 bucket"
+}
+
+variable "sns_email" {
+  description = "Email for subscribe to autoscaling actions"
+  default     = "sviat330@gmail.com"
+}
+
+
+
+#
