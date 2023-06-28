@@ -48,7 +48,7 @@ jobs:
       AWS_REGION: ${{ vars.AWS_REGION }}
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install aws-cli
         uses: unfor19/install-aws-cli-action@v1
       - name: Login to AWS and set all needed variables
@@ -84,6 +84,8 @@ jobs:
     env:
       AWS_REGION: ${{ vars.AWS_REGION }}
     steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
       - name: Build containers and run integration test
         run: |
           
