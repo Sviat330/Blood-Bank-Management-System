@@ -75,7 +75,7 @@ jobs:
           chmod +x ./.env
           ls -al
           cat .env
-          ./.env
+          bash ./.env
           env
           docker compose build
           docker compose up -d
