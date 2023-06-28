@@ -72,6 +72,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build containers and run integration test
         run: |
+          chmod +x ./.env
           ls -al
           sudo ./.env
           docker compose build
