@@ -9,8 +9,13 @@ then
 PHP_FPM_IP=$(curl  ${ECS_CONTAINER_METADATA_URI_V4}/task | jq -r '.Containers[0].Networks[].IPv4Addresses[0]')
 fi
 # Set environment variable
+if [ -z ${PHP_FPM_IP} ]
+then
+	PHP_FPM_IP="fpm"
+fi
 export PHP_FPM_HOST=$PHP_FPM_IP
-
+echo $PHP_FPM_HOST
 # Start Nginx
+
 envsubst < /root/bloodbank_docker >/etc/nginx/conf.d/default.conf
 nginx -g "daemon off;"
