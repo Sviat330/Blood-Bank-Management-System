@@ -84,7 +84,7 @@ variable "ecs_max_size" {
 
 variable "ecs_des_cap" {
   description = "autoscaling group desired capacity of deployed ecs containers"
-  default     = 2
+  default     = 1
 }
 
 
