@@ -47,6 +47,8 @@ jobs:
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
       AWS_REGION: ${{ vars.AWS_REGION }}
     steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
       - name: Install aws-cli
         uses: unfor19/install-aws-cli-action@v1
       - name: Login to AWS and set all needed variables
