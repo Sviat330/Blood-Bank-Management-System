@@ -61,7 +61,7 @@ jobs:
           aws configure set aws_secret_access_key $AWS_SECRET_KEY
           aws configure set default.region $AWS_REGION
           ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-          echo "export ACCOUNT_ID=$ACCOUNT_ID" >> $ACCOUNT_ID
+          echo "ACCOUNT_ID=$ACCOUNT_ID" >> $ACCOUNT_ID
           echo "export ACCOUNT_ID=$ACCOUNT_ID" >>.env
           echo "export AWS_REGION=$AWS_REGION" >>.env
           GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-6)
