@@ -72,7 +72,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build containers and run integration test
         run: |
-          ./.env
+          sudo ./.env
           docker compose build
           docker compose up -d
           docker ps
