@@ -73,6 +73,7 @@ jobs:
           docker compose build
           docker compose up -d
           docker ps
+          sleep 5
           ./web/test/check_localhost.sh
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ env.ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
           docker compose push
