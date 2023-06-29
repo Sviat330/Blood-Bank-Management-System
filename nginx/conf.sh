@@ -2,12 +2,23 @@
 export DOLLAR="$"
 export PHP_FPM_PORT="9000"
 # Retrieve IP address of the PHP-FPM container
+x=1
+while [[ $x -le 10 ]]; do
+	#statements
+
 PHP_FPM_IP=$(curl  ${ECS_CONTAINER_METADATA_URI_V4}/task | jq -r '.Containers[-1].Networks[].IPv4Addresses[0]')
 OWN_IP=$(hostname -i)
 if [ "$OWN_IP" == "$PHP_FPM_IP" ]
 then
 PHP_FPM_IP=$(curl  ${ECS_CONTAINER_METADATA_URI_V4}/task | jq -r '.Containers[0].Networks[].IPv4Addresses[0]')
 fi
+if [ -z ${PHP_FPM_IP} ]
+then
+	continue
+else
+	break
+fi
+done
 # Set environment variable
 if [ -z ${PHP_FPM_IP} ]
 then
