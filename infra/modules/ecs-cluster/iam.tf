@@ -19,6 +19,10 @@ resource "aws_iam_role_policy_attachment" "ecs_agent" {
   role       = aws_iam_role.ecs_agent.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
+resource "aws_iam_role_policy_attachment" "logs" {
+  role       = aws_iam_role.ecs_agent.name
+  policy_arn = aws_iam_policy.policy_for_logs.arn
+}
 
 resource "aws_iam_instance_profile" "ecs_agent" {
   name = "ecs-agent"
@@ -100,9 +104,9 @@ resource "aws_iam_policy" "S3_get_env_object" {
 
 
 resource "aws_iam_role_policy_attachment" "ecsTaskExecutionRole_policy" {
-  count      = length(["arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role", aws_iam_policy.S3_get_env_object.arn, aws_iam_policy.policy_for_logs.arn])
+  count      = length(["arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role", aws_iam_policy.S3_get_env_object.arn])
   role       = aws_iam_role.ecsTaskExecutionRole.name
-  policy_arn = element(["arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role", aws_iam_policy.S3_get_env_object.arn, aws_iam_policy.policy_for_logs.arn], count.index)
+  policy_arn = element(["arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role", aws_iam_policy.S3_get_env_object.arn], count.index)
 }
 
 
