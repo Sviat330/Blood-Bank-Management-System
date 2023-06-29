@@ -149,6 +149,14 @@ DEFINITION
       "containerPort" : ${var.container_ports[0]},
       "hostPort"      : 0
     }],
+        "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-region" : "eu-north-1",
+                    "awslogs-group" : "bloodbank",
+                    "awslogs-stream-prefix" : "${var.container_ports[0]}"
+                }
+            },
     "environmentFiles": [
                 {
                     "value": "${var.s3_arn}/${var.s3_key}",
@@ -165,6 +173,14 @@ DEFINITION
       "containerPort" : ${var.container_ports[1]},
       "hostPort"      : 0
     }],
+        "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-region" : "eu-north-1",
+                    "awslogs-group" : "bloodbank",
+                    "awslogs-stream-prefix" : "${var.container_ports[1]}"
+                }
+            },
   "dependsOn": [
    {
        "containerName": "${var.app_name[0]}",
