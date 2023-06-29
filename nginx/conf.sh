@@ -18,6 +18,7 @@ then
 else
 	break
 fi
+x=$(( $x +1 ))
 done
 # Set environment variable
 if [ -z ${PHP_FPM_IP} ]
