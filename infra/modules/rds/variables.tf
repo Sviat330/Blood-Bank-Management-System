@@ -47,8 +47,8 @@ variable "db_username" {
   default     = "bloodbank"
 }
 variable "pass" {
-  type    = string
-  default = "wasdwasd74"
+  type = string
+
 }
 
 variable "subnet_ids" {
