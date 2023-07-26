@@ -6,18 +6,21 @@ The "PHP Project Deployment on Amazon ECS with CI/CD" project involved designing
 ![Scheme](images/scheme.jpg)
 ## Technologies Used: ##
 
-AWS (Amazon Web Services) for cloud infrastructure
-Amazon ECS (Elastic Container Service) for container orchestration]
-Amazon ALB for load balancing
-Amazon VPC for networking
-Docker for containerization of the PHP application
-Amazon ECR (Elastic Container Registry) for Docker image management
-Auto Scaling Groups with EC2 for hosting containers
-GitHub Actions for CI/CD automation
-Amazon IAM for creating roles
-Amazon Lambda for restoring database
-Amazon RDS (Relational Database Service) for the application's database
-Amazon CloudWatch for centralized logging and monitoring
+AWS (Amazon Web Services) for cloud infrastructure<br>
+Amazon ECS (Elastic Container Service) for container orchestration<br>
+Amazon S3 for env file<br>
+Amazon ALB for load balancing<br>
+Amazon VPC for networking<br>
+Docker for containerization of the PHP application<br>
+Amazon ECR (Elastic Container Registry) for Docker image management<br>
+Amazon Auto Scaling Groups with EC2 for hosting containers<br>
+Amazon SNS for notification when auto scaling occurs<br>
+GitHub Actions for CI/CD automation<br>
+Amazon IAM for creating roles<br>
+Amazon Lambda for restoring database<br>
+Amazon RDS (Relational Database Service) for the application's database<br>
+Amazon CloudWatch for centralized logging and monitoring<br>
+
 
 ## Key Features: ##
 
@@ -38,12 +41,12 @@ Security: AWS security groups were configured to control inbound and outbound tr
 ## Design and Architecture: ##
 The project architecture involved:
 
-Dockerized PHP Application: The PHP application was containerized using Docker and stored in Amazon ECR.
-Amazon ECS Cluster: An ECS cluster managed the deployment of containers across multiple instances.
-Amazon Auto Scaling Group as capacity provider for ECS Cluster
-GitHub Actions CI/CD Pipeline: GitHub Actions workflows triggered automated testing, Docker image building, and ECS deployment.
-Amazon RDS: The application's database was hosted on Amazon RDS.
-Amazon CloudWatch: Monitoring and logging were centralized using Amazon CloudWatch.
+Dockerized PHP Application: The PHP application was containerized using Docker and stored in Amazon ECR.<br>
+Amazon ECS Cluster: An ECS cluster managed the deployment of containers across multiple instances.<br>
+Amazon Auto Scaling Group as capacity provider for ECS Cluster<br>
+GitHub Actions CI/CD Pipeline: GitHub Actions workflows triggered automated testing, Docker image building, and ECS deployment.<br>
+Amazon RDS: The application's database was hosted on Amazon RDS.<br>
+Amazon CloudWatch: Monitoring and logging were centralized using Amazon CloudWatch.<br>
 
 ## Challenges and Learnings: ##
 The major challenge was designing the CI/CD workflow to ensure smooth integration with Amazon ECS and managing environment variables securely. This project provided valuable experience in building efficient CI/CD pipelines and containerized deployments.
