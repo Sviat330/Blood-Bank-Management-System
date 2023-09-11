@@ -5,8 +5,6 @@ export PHP_FPM_PORT="9000"
 x=1
 while [ $x -lt 10 ] 
 do
-	#statements
-
 PHP_FPM_IP=$(curl  ${ECS_CONTAINER_METADATA_URI_V4}/task | jq -r '.Containers[1].Networks[].IPv4Addresses[0]')
 OWN_IP=$(hostname -i)
 if [ "$OWN_IP" == "$PHP_FPM_IP" ]
